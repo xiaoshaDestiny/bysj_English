@@ -1,0 +1,96 @@
+
+
+    @OnMessage
+    public  void onMessage(String message, Session session) {
+        System. out .println("当前题目"+ this.currQuestion.toString());
+        System. out .println("用户选择:" + message);
+        System. out .println("正确答案:" +  this.getRightAnswer());
+//最后一个没有答对
+        if(( this.count==9) && (!message.equals( this.getRightAnswer()))){
+            try {
+                String tip = "1001";
+                Question question =  this.currQuestion;
+                String questionStr = question.getWord()+";"+question.getAitem()+";"
+                        +question.getBitem()+";"+question.getCitem()+";"
+                        +question.getDitem();
+//应该再把选项倒腾一下再发送出去的;
+                sendError(tip+";"+questionStr);
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//最后一个 还答对了
+        if(( this.count==9) && (message.equals( this.getRightAnswer()))){
+            try {
+//一组10个题目答完了
+                String tip = "下一组;退出";
+                this.session.getBasicRemote().sendText("1000");
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+            System. out .println("10个题目完成了");
+            System. out .println("最后一个答对了...");
+            System. out .println();
+        }
+//不是最后一个 没有答对
+        if(( this.count<9) && (!message.equals( this.getRightAnswer()))){
+            try {
+                String tip = "1001";
+                Question question =  this.currQuestion;
+                String questionStr = question.getWord()+";"+question.getAitem()+";"
+                        +question.getBitem()+";"+question.getCitem()+";"
+                        +question.getDitem();
+//应该再把选项倒腾一下再发送出去的;
+                sendError(tip+";"+questionStr);
+                this.count =  this.count + 0;
+                System. out .println("第"+ this.count);
+                System. out .println("不是最后一个题目 还没答对 再答一次...");
+                System. out .println();
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+            //不是最后一个 但是答对了
+        if(( this.count<9) && (message.equals( this.getRightAnswer()))){
+            try {
+                //生成新的题目
+                Word word =  this.words.get( this.count);
+                Question question =  this.getQuestionByWord(word);
+                this.currQuestion = question;  //在发送提题目之前记录当前题目
+                sendMessage(question);
+                this.count =  this.count + 1;
+                System. out .println("第"+ this.count);
+                System. out .println("不是最后一个题目 答对了 下一题...");
+                System. out .println();
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    @Autowired //自动注入
+    private UserService userService;
+    @Autowired
+    private WordRepsotory wordRepsotory;
+    @Autowired
+    private WordService wordService;
+    @ModelAttribute(value="word")
+    public  void getUser(@RequestParam(value="id",required= false) Integer id,
+                         Map<String,Object> map){
+        if(id!= null){
+            map.put("word",wordRepsotory.getById(id));
+        }
+    }
+    @RequestMapping("registerUser") //映射用户请求
+    public String registerUser(@RequestParam("username")String username,
+                               @RequestParam("password")String password, @RequestParam("password_again")String
+                                       again){
+        System. out .println(username+":"+password+";"+again);
+        User user =  new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        userService.saveUser(user);
+        return "index"; //返回给视图解析器
+    }
