@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+
+    <style type="text/css">
+        .top{
+            height: 40px;
+            background-color: #00F7DE;
+        }
+        .btn-sign {
+            display: inline-block;
+            border-radius: 4px;
+            background-color: #f4511e;
+            border: 1px solid orangered;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 15px;
+            padding: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-login {
+            display: inline-block;
+            border-radius: 4px;
+            background-color: white;
+            border: 1px solid darkgrey;
+            color: black;
+            text-align: center;
+            font-size: 15px;
+            padding: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<!--顶栏-->
+<div class="top">
+    <div align="right">
+        <button type="button" class="btn-sign" onclick="myClick()<!--location.href='www.baidu.com'-->" style="vertical-align:middle"><span>免费注册</span></button>
+        <button type="button" class="btn-login" onclick="myClick()" style="vertical-align:middle"><span>马上登录</span></button>
+    </div>
+</div>
+
+<!--导航-->
+<ul class="layui-nav layui-bg-cyan">
+    <li class="layui-nav-item"><a href="">青叶</a></li>
+    <li class="layui-nav-item layui-this"><a href="">首页</a></li>
+    <li class="layui-nav-item">
+        <a href="">词汇练习</a>
+        <dl class="layui-nav-child">
+            <dd><a href="">中学词汇</a></dd>
+            <dd><a href="">四六级词汇</a></dd>
+            <dd><a href="">考研热点高频</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="">词库管理</a>
+        <dl class="layui-nav-child">
+            <dd><a href="">中学词汇</a></dd>
+            <dd><a href="">四六级词汇</a></dd>
+            <dd><a href="">考研热点高频</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item"><a href="">注册登录</a></li>
+</ul>
+
+<!--轮播-->
+<div class="layui-carousel" id="test10">
+    <div carousel-item="">
+        <div><img src="image/imageBox/外教01.jpg"></div>
+        <div><img src="image/imageBox/外教02.jpg"></div>
+        <div><img src="//res.layui.com/images/layui/demo/3.png"></div>
+        <div><img src="//res.layui.com/images/layui/demo/4.png"></div>
+        <div><img src="//res.layui.com/images/layui/demo/5.png"></div>
+        <div><img src="//res.layui.com/images/layui/demo/6.png"></div>
+        <div><img src="//res.layui.com/images/layui/demo/7.png"></div>
+    </div>
+</div>
+
+
+
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        //监听导航点击
+        element.on('nav(demo)', function(elem){
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+
+    layui.use(['carousel', 'form'], function(){
+        var carousel = layui.carousel
+            ,form = layui.form;
+
+
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            ,width: '778px'
+            ,height: '440px'
+            ,interval: 5000
+        });
+
+
+        var $ = layui.$, active = {
+            set: function(othis){
+                var THIS = 'layui-bg-normal'
+                    ,key = othis.data('key')
+                    ,options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function(){
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function(){
+            var value = this.value
+                ,options = {};
+            if(!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+    });
+
+</script>
+
+</body>
+</html>
