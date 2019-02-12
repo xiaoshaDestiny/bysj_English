@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,5 +26,13 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     //查询出一组题目10个
     @Query(value = "SELECT * FROM Question order by rand() limit 2",nativeQuery = true)
     List<Question> qryAGroupWorrds();
+
+    //分页查询
+    @Query(value = "SELECT * FROM Question LIMIT (:PageNo-1) * :PageSize , :PageSize",nativeQuery = true)
+    List<Question> queryQuestionPage(@Param("PageNo") int PageNo, @Param("PageSize") int PageSize);
+
+    //为 @Query 注解传递参数的方式1: 命名参数的方式.
+//    @Query("SELECT p FROM Person p WHERE p.lastName = :lastName AND p.email = :email")
+//    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
 
 }

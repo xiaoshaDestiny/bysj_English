@@ -59,11 +59,26 @@ public class QuestionService {
 
 */
 
+
+
+
     public List<Question> getAGroupQuestion(){
         System.out.println("随机查询2个单词");
         List<Question> questions = questionRepsotory.qryAGroupWorrds();
         return questions;
     }
 
+
+    /**
+     * 分页查询单词
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public List<Question> getQuestionPage(int pageNo,int pageSize){
+        System.out.println("分页查询,第"+pageNo+"页，每页"+pageSize+"条数据");
+        List<Question> questions = questionRepsotory.queryQuestionPage(pageNo,pageSize);
+        return questions;
+    }
 
 }
