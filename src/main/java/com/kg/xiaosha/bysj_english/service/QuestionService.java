@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -79,6 +80,22 @@ public class QuestionService {
         System.out.println("分页查询,第"+pageNo+"页，每页"+pageSize+"条数据");
         List<Question> questions = questionRepsotory.queryQuestionPage(pageNo,pageSize);
         return questions;
+    }
+
+    /**
+     * 获取数据表的总记录条数
+     */
+    public int getQuestionNumber(){
+        return questionRepsotory.queryNumber();
+    }
+
+    /**
+     * 根据ID删除Question表的一条记录
+     */
+    @Transactional
+    public boolean deleteQuestionById(int id){
+        questionRepsotory.deleteByQid(id);
+        return true;
     }
 
 }

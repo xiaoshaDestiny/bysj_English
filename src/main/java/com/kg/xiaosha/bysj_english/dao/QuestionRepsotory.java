@@ -3,6 +3,7 @@ package com.kg.xiaosha.bysj_english.dao;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.data.repository.query.Param;
@@ -28,11 +29,19 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     List<Question> qryAGroupWorrds();
 
     //分页查询
-    @Query(value = "SELECT * FROM Question LIMIT (:PageNo-1) * :PageSize , :PageSize",nativeQuery = true)
+    @Query(value = "SELECT * FROM Question LIMIT :PageNo,:PageSize",nativeQuery = true)
     List<Question> queryQuestionPage(@Param("PageNo") int PageNo, @Param("PageSize") int PageSize);
 
     //为 @Query 注解传递参数的方式1: 命名参数的方式.
 //    @Query("SELECT p FROM Person p WHERE p.lastName = :lastName AND p.email = :email")
 //    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
 
+    //查询数据表总的记录数
+    @Query(value = "SELECT COUNT(*) FROM Question",nativeQuery = true)
+    public int queryNumber();
+
+    //根据id删除单词
+    @Modifying
+    @Query(value = "DELETE  FROM Question WHERE qid = :qid",nativeQuery = true)
+    public void deleteByQid(@Param("qid") int qid);
 }
