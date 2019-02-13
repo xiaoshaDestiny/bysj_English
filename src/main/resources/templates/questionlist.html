@@ -9,6 +9,17 @@
     <link href="/css/common.css" th:href="@{/css/common.css}" rel="stylesheet">
     <title>青叶单词训练</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <style type="text/css">
+        body {
+            background: #f4fbdb;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            color:#000;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 
@@ -21,7 +32,6 @@
         <button type="button" class="btn-log" style="vertical-align:middle"><span>马上登录</span></button>
     </div>
 </div>
-
 <!--导航栏-->
 <div style="width:70%; position: relative; left:15%;background-color: #A9A9A9;">
     <ul class="layui-nav layui-bg-cyan">
@@ -46,67 +56,101 @@
     </ul>
 </div>
 
-<div class="box">
+<div class="box" style="width: 100%;margin-top:50px;overflow:hidden">
 
-    <div class="list">
+    <div style="width: 47%;margin-left: 10px;float: left">
         <table class="layui-hide" id="test" lay-filter="test"></table>
     </div>
 
-    <form class="layui-form layui-form-pane" th:action="@{/editQuestion}" method="post">
-        <div class="layui-form-item">
-            <label class="layui-form-label">单词</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" autocomplete="off" placeholder="请输入英语词汇" class="layui-input">
-                       <!--th:value="${question.word}>-->
-            </div>
-        </div>
+    <div style="width: 47%;margin-right: 10px;float: right;margin-top: 10px">
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">中文</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" autocomplete="off" placeholder="请输入中文含义" class="layui-input">
-                <!--th:value="${question.word}>-->
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">干扰项一</label>
-                <div class="layui-input-inline">
-                    <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" placeholder="请填写容易混淆的中文哦"class="layui-input">
+        <form class="layui-form layui-form-pane" th:action="@{/queryQuestion}" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">单词</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" style="width:60%;float: left">
+                    <button class="layui-btn" lay-submit="" style="width: 20%;float:left">查询</button>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">干扰项二</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+        </form>
+        <br><hr><br><br>
+        <form class="layui-form layui-form-pane" th:action="@{/editQuestion}" method="post">
+
+            <!--这两个是隐藏的-->
+            <input type="hidden" name="_method" value="put" th:if="${que!=null}"/>
+            <input type="hidden" name="id" th:if="${que!=null}" th:value="${que.qid}">
+
+<!--            <form th:action="@{/emp}" method="post">
+                &lt;!&ndash;发送put请求修改员工数据&ndash;&gt;
+                &lt;!&ndash;
+                1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
+                2、页面创建一个post表单
+                3、创建一个input项，name="_method";值就是我们指定的请求方式
+                &ndash;&gt;
+                <input type="hidden" name="_method" value="put" th:if="${emp!=null}"/>
+                <input type="hidden" name="id" th:if="${emp!=null}" th:value="${emp.id}">
+                <div class="form-group">
+                    <label>LastName</label>
+                    <input name="lastName" type="text" class="form-control" placeholder="zhangsan" th:value="${emp!=null}?${emp.lastName}">
+                </div>-->
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">单词</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" th:value="${que!=null}?${que.word}">
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">干扰项三</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">中文</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入中文含义" class="layui-input" th:value="${que!=null}?${que.answer}">
                 </div>
             </div>
-        </div>
 
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">单词难度</label>
-            <div class="layui-input-block">
-                <select name="interest" lay-filter="aihao">
-                    <option value=""></option>
-                    <option value="0">中小学词汇</option>
-                    <option value="1" selected="">四六级词汇</option>
-                    <option value="2">考研高频词汇</option>
-                </select>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">干扰项一</label>
+                    <div class="layui-input-inline" style="width: 290px">
+                        <input type="tel" name="phone" autocomplete="off" placeholder="请填写容易混淆的中文哦"class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">干扰项二</label>
+                    <div class="layui-input-inline" style="width: 290px">
+                        <input type="text" name="email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">干扰项三</label>
+                    <div class="layui-input-inline" style="width: 290px">
+                        <input type="text" name="email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="layui-form-item">
-            <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
-        </div>
-    </form>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">单词难度</label>
+                <div class="layui-input-block">
+                    <select name="interest" lay-filter="aihao">
+                        <option value=""></option>
+                        <option value="0">中小学词汇</option>
+                        <option value="1" selected="">四六级词汇</option>
+                        <option value="2">考研高频词汇</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-submit="" lay-filter="demo2">确认修改/新增</button>
+            </div>
+        </form>
+
+    </div>
+
+
+
 </div>
 
 
@@ -145,7 +189,6 @@
             layer.msg(elem.text());
         });
     });
-
     layui.use(['carousel', 'form'], function(){
         var carousel = layui.carousel
             ,form = layui.form;
@@ -180,13 +223,11 @@
             ins3.reload(options);
         });
     });
-
 </script>
 
 <script>
     layui.use('table', function(){
         var table = layui.table;
-
         table.render({
             elem: '#test'
             ,url:'/getPage'
@@ -195,17 +236,16 @@
             ,totalRow: true
             ,cols: [
                 [
-                {type: 'checkbox', fixed: 'left'},
-                {field:'qid', title:'ID', width:80, fixed: 'left',},
-                {field:'word', title:'单词', width:100, edit: 'text'},
-                {field:'answer', title:'意思', width:180, sort: true,},
-                {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
-            ]
+                    {type: 'checkbox', fixed: 'left'},
+                    {field:'qid', title:'ID', width:80, fixed: 'left',},
+                    {field:'word', title:'单词', width:100, edit: 'text'},
+                    {field:'answer', title:'意思', width:180, sort: true,},
+                    {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                ]
             ]
             ,page: true
             ,limit: 10
         });
-
         //工具栏事件
         table.on('toolbar(test)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
@@ -223,7 +263,6 @@
                     break;
             };
         });
-
         // 执行搜索，表格重载
         $('#do_search').on('click', function () {
             // 搜索条件
@@ -241,7 +280,6 @@
                 }
             });
         });
-
         //数据表单条的编辑和删除
         table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
@@ -267,26 +305,27 @@
                     });
                     layer.close(index);
                 });
+            }
 
-            } else if(layEvent === 'edit'){ //编辑
-                console.log(data);
-                layer.open({
-                    type: 1,
-                    area: ['500px', '700px'],
-                    title: "更改信息",
-                    fixed: false, //不固定
-                    maxmin: true,
-                    maxmin: false,
-                    shadeClose:false,
-                    content: $('#usersedit')
-                });
-                //表单值
-                form.val("testeditform",{
-                    "qid":data.qid,
-                    "answer":data.answer,
-                    "word":data.word,
-                    "userpwd":data.pwd,
-                    "userclass":data.class
+            if(layEvent === 'edit'){ //编辑
+                layer.confirm('确认编辑“'+data.word+"”这个单词吗?", function(index){
+                    $.ajax({
+                        url:'/queryQueById',
+                        type:'post',
+                        data:{'id':data.qid},//向服务端发送编辑的id
+                        success:function(suc){
+                            if(suc==200){
+                                obj.del(); //编辑对应行（tr）的DOM结构，并更新缓存
+                                layer.close(index);
+                                console.log(index);
+                                layer.msg("删除成功",{icon:1});
+                            }
+                            else{
+                                layer.msg("删除失败",{icon:5});
+                            }
+                        }
+                    });
+                    layer.close(index);
                 });
             }
         });

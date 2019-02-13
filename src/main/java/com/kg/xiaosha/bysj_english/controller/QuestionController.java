@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,14 +73,29 @@ public class QuestionController {
         return map;
     }
 
+/*    @GetMapping("/emp/{id}")
+    public String toEditPage(@PathVariable("id") Integer id,Model model){
+        Employee employee = employeeDao.get(id);
+        model.addAttribute("emp",employee);
 
-    @RequestMapping("/manager1")
-    public String manager1() {
-        return "listtest";
-    }
+        //页面要显示所有的部门列表
+        Collection<Department> departments = departmentDao.getDepartments();
+        model.addAttribute("depts",departments);
+        //回到修改页面(add是一个修改添加二合一的页面);
+        return "emp/add";
+    }*/
 
-    @RequestMapping("/manager2")
-    public String manager2() {
+
+    @RequestMapping("/manager")
+    public String manager2(HttpServletRequest request,Model model) {
+        //获取难度等级
+        int pageSize = Integer.parseInt(request.getParameter("level"));
+
+        //查询出第一条记录 要显示到表单里面
+        Question question = questionService.getQuestionById(1);
+        model.addAttribute("que",question);
+
+
         return "questionlist";
     }
 
