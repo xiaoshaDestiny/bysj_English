@@ -50,34 +50,31 @@ public class QuestionService {
      */
     @Cacheable(cacheNames = {"question"})
     public Question getQuestionById(int id){
-        System.out.println("查询"+id+"号单词");
+        System.out.println("log======>(xiaosha):根据id查询Question数据表，参数id="+id+"(使用了缓存)");
         return questionRepsotory.getByQid(id);
     }
 
- /*   @CachePut 在方法运行以后给缓存中添加数据
-
+    /*   @CachePut 在方法运行以后给缓存中添加数据
         想要让更新操作去同步更新缓存，要保证key值一样
-
-*/
-
-
-
-
-    public List<Question> getAGroupQuestion(){
-        System.out.println("随机查询2个单词");
-        List<Question> questions = questionRepsotory.qryAGroupWorrds();
-        return questions;
-    }
+    */
 
 
     /**
-     * 分页查询单词
+     * 下面是还没有使用缓存的
+     */
+
+
+
+    /**
+     * 分页查询单词，将参数的计算弄到service层
      * @param pageNo
      * @param pageSize
      * @return
      */
     public List<Question> getQuestionPage(int pageNo,int pageSize){
-        System.out.println("分页查询,第"+pageNo+"页，每页"+pageSize+"条数据");
+        System.out.println("log======>(xiaosha):分页查询,参数第"+pageNo+"页，每页"+pageSize+"条数据");
+        //计算当前页
+        pageNo =  (pageNo -1)*pageSize;
         List<Question> questions = questionRepsotory.queryQuestionPage(pageNo,pageSize);
         return questions;
     }
@@ -86,16 +83,41 @@ public class QuestionService {
      * 获取数据表的总记录条数
      */
     public int getQuestionNumber(){
+        System.out.println("log======>(xiaosha):获取Question数据表的总记录数量");
         return questionRepsotory.queryNumber();
     }
 
     /**
-     * 根据ID删除Question表的一条记录
+     * 根据ID删除Question表的一条记录,删除和增加要在service上加事务
      */
     @Transactional
     public boolean deleteQuestionById(int id){
+        System.out.println("log======>(xiaosha):根据Id删除Question表里的一条数据,参数id="+id);
         questionRepsotory.deleteByQid(id);
         return true;
+    }
+
+    /**
+     * 根据word查询question数据表
+     */
+    public Question getQuestionByWord(String word){
+        System.out.println("log======>(xiaosha):根据word查询Question表里的一条数据,参数word="+word);
+
+        //这里是还要改的，因为word不是主键，可能会查出多个来，只要一个返回展示就行
+       return questionRepsotory.getQuestionByWord(word);
+    }
+
+
+
+
+    /**
+     * 这是项目初期的一些代码，当时是用来测试是否查到数据了
+     * @return
+     */
+    public List<Question> getAGroupQuestion(){
+        System.out.println("随机查询2个单词");
+        List<Question> questions = questionRepsotory.qryAGroupWorrds();
+        return questions;
     }
 
 }

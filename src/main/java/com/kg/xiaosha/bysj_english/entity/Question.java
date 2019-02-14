@@ -1,8 +1,5 @@
 package com.kg.xiaosha.bysj_english.entity;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 
 /**
@@ -34,14 +31,38 @@ public class Question {
     @Column(name = "answer")
     private String answer;
 
+    @Column(name = "level")
+    private int level;
+
+    @Column(name = "pronounce")
+    private String pronounce;
+
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getPronounce() {
+        return pronounce;
+    }
+
+    public void setPronounce(String pronounce) {
+        this.pronounce = pronounce;
+    }
+
     public Question() {
     }
 
-    public Question(int qid, String word, String options, String answer) {
-        this.qid = qid;
+    public Question(String word, String options, String answer, int level, String pronounce) {
         this.word = word;
         this.options = options;
         this.answer = answer;
+        this.level = level;
+        this.pronounce = pronounce;
     }
 
     public int getQid() {
@@ -76,6 +97,7 @@ public class Question {
         this.answer = answer;
     }
 
+
     @Override
     public String toString() {
         return "Question{" +
@@ -83,6 +105,8 @@ public class Question {
                 ", word='" + word + '\'' +
                 ", options='" + options + '\'' +
                 ", answer='" + answer + '\'' +
+                ", level=" + level +
+                ", pronounce='" + pronounce + '\'' +
                 '}';
     }
 }

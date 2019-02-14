@@ -21,8 +21,6 @@
         }
     </style>
 </head>
-
-
 <body>
 
 <!--顶栏-->
@@ -56,55 +54,50 @@
     </ul>
 </div>
 
-<div class="box" style="width: 100%;margin-top:50px;overflow:hidden">
+<div class="box" style="width: 100%;margin-top:50px;overflow:hidden;margin-bottom: 50px">
 
-    <div style="width: 47%;margin-left: 10px;float: left">
+    <div style="width: 60%;margin-left:2.5%;float: left">
         <table class="layui-hide" id="test" lay-filter="test"></table>
     </div>
 
-    <div style="width: 47%;margin-right: 10px;float: right;margin-top: 10px">
+    <div style="width: 35%;margin-left:2.5%;float: right;margin-top: 10px">
 
-        <form class="layui-form layui-form-pane" th:action="@{/queryQuestion}" method="post">
+        <form class="layui-form layui-form-pane" th:action="@{/getQuestion}" method="post">
             <div class="layui-form-item">
                 <label class="layui-form-label">单词</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" style="width:60%;float: left">
-                    <button class="layui-btn" lay-submit="" style="width: 20%;float:left">查询</button>
+                    <input type="text" name="word" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" style="width:70%;float: left">
+                    <button class="layui-btn" lay-submit="" style="width: 30%;float:left">查询</button>
                 </div>
             </div>
         </form>
-        <br><hr><br><br>
+
         <form class="layui-form layui-form-pane" th:action="@{/editQuestion}" method="post">
+
+            <!--这里放单词和发音还有发音按钮-->
+            <fieldset class="layui-elem-field">
+                <legend id="word1" th:utext="${que.word}" style="font-size:48px">单词放这</legend>
+                <div class="layui-field-box">
+                    <i class="layui-icon layui-icon-speaker" style="font-size:30px; color: #1E9FFF;margin-left: 20px;margin-right: 20px;"></i>
+                    <text id="pronounce"th:utext="${que.pronounce}">发音放这</text>
+                </div>
+            </fieldset>
 
             <!--这两个是隐藏的-->
             <input type="hidden" name="_method" value="put" th:if="${que!=null}"/>
             <input type="hidden" name="id" th:if="${que!=null}" th:value="${que.qid}">
 
-<!--            <form th:action="@{/emp}" method="post">
-                &lt;!&ndash;发送put请求修改员工数据&ndash;&gt;
-                &lt;!&ndash;
-                1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
-                2、页面创建一个post表单
-                3、创建一个input项，name="_method";值就是我们指定的请求方式
-                &ndash;&gt;
-                <input type="hidden" name="_method" value="put" th:if="${emp!=null}"/>
-                <input type="hidden" name="id" th:if="${emp!=null}" th:value="${emp.id}">
-                <div class="form-group">
-                    <label>LastName</label>
-                    <input name="lastName" type="text" class="form-control" placeholder="zhangsan" th:value="${emp!=null}?${emp.lastName}">
-                </div>-->
-
             <div class="layui-form-item">
-                <label class="layui-form-label">单词</label>
+                <label class="layui-form-label">添加/修改</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" th:value="${que!=null}?${que.word}">
+                    <input type="text" id="word2" name="word" autocomplete="off" placeholder="请输入英语词汇" class="layui-input" th:value="${que!=null}?${que.word}">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">中文</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入中文含义" class="layui-input" th:value="${que!=null}?${que.answer}">
+                    <input type="text" name="answer" autocomplete="off" placeholder="请输入中文含义" class="layui-input" th:value="${que!=null}?${que.answer}">
                 </div>
             </div>
 
@@ -112,19 +105,19 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">干扰项一</label>
                     <div class="layui-input-inline" style="width: 290px">
-                        <input type="tel" name="phone" autocomplete="off" placeholder="请填写容易混淆的中文哦"class="layui-input">
+                        <input type="text" id="option1" name="option1" autocomplete="off" placeholder="请填写容易混淆的中文哦"class="layui-input" th:value="${options!=null}?${options[0]}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">干扰项二</label>
                     <div class="layui-input-inline" style="width: 290px">
-                        <input type="text" name="email" autocomplete="off" class="layui-input">
+                        <input type="text" id="option2" name="option2" autocomplete="off" class="layui-input" th:value="${options!=null}?${options[1]}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">干扰项三</label>
                     <div class="layui-input-inline" style="width: 290px">
-                        <input type="text" name="email" autocomplete="off" class="layui-input">
+                        <input type="text" id="option3" name="option3" autocomplete="off" class="layui-input" th:value="${options!=null}?${options[2]}">
                     </div>
                 </div>
             </div>
@@ -132,31 +125,23 @@
 
             <div class="layui-form-item">
                 <label class="layui-form-label">单词难度</label>
-                <div class="layui-input-block">
-                    <select name="interest" lay-filter="aihao">
-                        <option value=""></option>
-                        <option value="0">中小学词汇</option>
-                        <option value="1" selected="">四六级词汇</option>
-                        <option value="2">考研高频词汇</option>
+                <div class="layui-input-block" style="width: 290px;">
+                    <select id="sel" name="level" lay-filter="aihao">
+                        <option value="1" th:selected="${que.level==1}">中小学词汇</option>
+                        <option value="2" th:selected="${que.level==2}">四六级词汇</option>
+                        <option value="3" th:selected="${que.level==3}">考研高频词汇</option>
                     </select>
                 </div>
             </div>
-
-            <div class="layui-form-item">
+            <div class="layui-form-item" style="margin-bottom: 100px">
                 <button class="layui-btn" lay-submit="" lay-filter="demo2">确认修改/新增</button>
             </div>
         </form>
-
     </div>
-
-
-
 </div>
 
-
-
 <!--底部地址-->
-<div class="foot" style="background-color:#323232 ;margin-top: 20px;">
+<div class="foot" style="background-color:#323232 ;margin-top: 100px;">
     <br><br>
     <p style="color: #C7C7C7" align="center"><span style="color: #556666;">destiny@XuRuiBiao.com</span>&nbsp;&nbsp;xiaosha</p><br>
     <p style="color:#556666" align="center" ;>云南省昆明市呈贡区昆明理工大学</p><br>
@@ -189,6 +174,7 @@
             layer.msg(elem.text());
         });
     });
+
     layui.use(['carousel', 'form'], function(){
         var carousel = layui.carousel
             ,form = layui.form;
@@ -225,7 +211,7 @@
     });
 </script>
 
-<script>
+<script type="text/javascript">
     layui.use('table', function(){
         var table = layui.table;
         table.render({
@@ -237,14 +223,17 @@
             ,cols: [
                 [
                     {type: 'checkbox', fixed: 'left'},
-                    {field:'qid', title:'ID', width:80, fixed: 'left',},
-                    {field:'word', title:'单词', width:100, edit: 'text'},
-                    {field:'answer', title:'意思', width:180, sort: true,},
-                    {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                    {field:'qid', title:'ID', width:80, fixed: 'left',sort: true},
+                    {field:'word', title:'单词', width:150, edit: 'text'},
+                    {field:'answer', title:'意思', width:180,edit: 'text'},
+                    {field:'pronounce', title:'发音', width:200},
+                    {field:'level', title:'难度', width:90,sort: true,},
+                    {field:'options', title:'干扰选项', width:300,edit: 'text'},
+                    {fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]
             ,page: true
-            ,limit: 10
+            ,limit: 20
         });
         //工具栏事件
         table.on('toolbar(test)', function(obj){
@@ -280,13 +269,16 @@
                 }
             });
         });
+
+
         //数据表单条的编辑和删除
         table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
+
             if(layEvent === 'del'){ //删除
-                layer.confirm('确认删除“'+data.qid+"”这个单词吗?", function(index){
+                layer.confirm('确认删除“'+data.word+"”这个单词吗?", function(index){
                     $.ajax({
                         url:'/deleteQuestion',
                         type:'post',
@@ -310,18 +302,30 @@
             if(layEvent === 'edit'){ //编辑
                 layer.confirm('确认编辑“'+data.word+"”这个单词吗?", function(index){
                     $.ajax({
-                        url:'/queryQueById',
+                        url:'/editQuestion',
                         type:'post',
-                        data:{'id':data.qid},//向服务端发送编辑的id
-                        success:function(suc){
-                            if(suc==200){
-                                obj.del(); //编辑对应行（tr）的DOM结构，并更新缓存
-                                layer.close(index);
-                                console.log(index);
-                                layer.msg("删除成功",{icon:1});
-                            }
-                            else{
-                                layer.msg("删除失败",{icon:5});
+                        data:{'word':data.word},     //向服务端发送编辑的单词
+                        success:function(success){
+                            console.log(success);
+                            //还是免不掉拼接字符串刷新页面
+                            var str= '';
+                            strWord1 = str + '<legend style="font-size:48px" id="word1">'+ success.word + '</legend>';
+                            strPronounce = str +'<text id="pronounce">'+ success.pronounce +'</text>';//<text id="pronounce">发音放这</text>
+                            $("#word1").html(strWord1);
+                            $("#pronounce").html(strPronounce);
+                            $("#word2").attr("value",success.word);
+                            $("#answer").attr("value",success.answer);
+                            $("#option1").attr("value",success.option1);
+                            $("#option2").attr("value",success.option2);
+                            $("#option3").attr("value",success.option3);
+                            var sel=document.getElementById('sel');
+                            var form = layui.form;
+                            for(var i=0;i <sel.options.length;i++) {
+                                if(parseInt(sel.options[i].value ) == success.level){
+                                    sel.options[i].selected = true;
+                                    form.render();//重新渲染一下
+                                    break;
+                                }
                             }
                         }
                     });

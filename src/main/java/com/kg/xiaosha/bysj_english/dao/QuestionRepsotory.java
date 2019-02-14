@@ -44,4 +44,8 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     @Modifying
     @Query(value = "DELETE  FROM Question WHERE qid = :qid",nativeQuery = true)
     public void deleteByQid(@Param("qid") int qid);
+
+    //根据word查询Question表
+    @Query(value = "SELECT *  FROM Question WHERE word = :word",nativeQuery = true)
+    public Question getQuestionByWord(@Param("word")String word);
 }
