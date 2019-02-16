@@ -1,6 +1,7 @@
 package com.kg.xiaosha.bysj_english.controller;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
+import com.kg.xiaosha.bysj_english.bean.QuestionMessage;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import com.kg.xiaosha.bysj_english.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 控制层组件，查询数据先返回成Json数据
+ * 控制层组件，关于数据表question的请求映射
  * @author xiaosha
  * @create 2019-02-11 14:22
  */
@@ -26,8 +27,57 @@ public class QuestionController {
     QuestionService questionService;
 
 
+    /**
+     * 顶部导航栏点击了答题的处理器
+     * @return  收到这个请求后返回到答题页面
+     */
+    @RequestMapping(value = "/socketQuestion")
+    public String socketQuestion(){
+        return "questionsocket";
+    }
 
 
+    /**
+     *
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/submitQuestion")
+    public Question submitQuestion(@RequestParam int id, @RequestParam String word, @RequestParam String answer,
+    @RequestParam String option1,@RequestParam String option2,@RequestParam String option3,@RequestParam String level){
+        Question que = new Question();
+        que.setQid(id);
+        que.setAnswer(answer);
+        que.setLevel(Integer.parseInt(level));
+        String options =  option1 + ";" + option2 + ";" + option3;
+        que.setOptions(options);
+        que.setWord(word);
+        questionService.insertOrUpdateQuestion(que);
+
+        /**
+         * 业务逻辑，尽量保证数据库的 word字段是唯一的
+         * 1：先查询数据库里面有没有这条数据
+         * 有------>修改
+         * 没有---->增加 但是没有音标
+         */
+
+
+/*        Map<String,Object> map=new HashMap<String,Object>();
+
+        Question question = questionService.getQuestionByWord(word);
+        String[] options = question.getOptions().split(";");
+
+        map.put("word",question.getWord());
+        map.put("pronounce",question.getPronounce());
+        map.put("answer",question.getAnswer());
+        map.put("option1",options[0]);
+        map.put("option2",options[1]);
+        map.put("option3",options[2]);
+        map.put("level",question.getLevel());*/
+
+        return que;
+    }
 
 
     /**
@@ -57,8 +107,6 @@ public class QuestionController {
 
 
     /**
-     * 这个还要修改一下
-     *
      * 获取一个Question数据填写到form表单中会被这个方法处理
      * 1:点击头部导航栏会发送请求 /getQuestion?level=1 ，也就是刚进这个页面的时候需要给一个默认的数据显示在页面上
      * 2:点击查询按钮会发送请求 是一个form表单 input的name是word ，这里是自己输入单词进行查询
@@ -74,13 +122,9 @@ public class QuestionController {
         Question question = new Question();
 
         if(level != null ){//这是头部导航栏会发送请求
-            //System.out.println("log======查询条件：难度等级是 "+level);
-            //查询出第一条记录 要显示到表单里面
-            question = questionService.getQuestionById(1);
+            question = questionService.getAQUestionByLevel(level); //查询出第一条记录 要显示到表单里面
         }
-        if(word != null){
-            //System.out.println("输出查询条件：word是... "+word);
-
+        if(word != null){ //给thymeleaf回显数据的
             question = questionService.getQuestionByWord(word);
         }
         model.addAttribute("que",question);
@@ -112,14 +156,11 @@ public class QuestionController {
      */
     @ResponseBody
     @RequestMapping("/getPage")
-    public Map<String,Object> getQuestionPage(HttpServletRequest request){
-        int currentPage = Integer.parseInt(request.getParameter("page"));//当前页
-        int pageSize = Integer.parseInt(request.getParameter("limit"));//每页显示数据
-
+    public Map<String,Object> getQuestionPage(@RequestParam(required=true) String page,
+              @RequestParam(required=true) String limit){
         Map<String,Object> map=new HashMap<String,Object>();
-        List<Question> questionlist = questionService.getQuestionPage(currentPage, pageSize);
+        List<Question> questionlist = questionService.getQuestionPage(page, limit);
         int countx=  questionService.getQuestionNumber();
-
         map.put("code",0);
         map.put("msg","");
         map.put("count",countx);

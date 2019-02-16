@@ -21,20 +21,28 @@ import java.util.List;
 @RepositoryDefinition(domainClass=Question.class,idClass=Integer.class)
 public interface QuestionRepsotory extends JpaRepository<Question, Integer>, JpaSpecificationExecutor<Question>, QuestionDao{
 
+/*    @Modifying
+    @Query("UPDATE Person p SET p.lastName = :lastName WHERE id = :id")
+    void updatePersonName(@Param("id") Integer id, @Param("lastName") String lastName);*/
+
+
+    //新增数据
+    @Modifying
+   public Question save(Question question);
+
+    /**
+     * 根据word更新Question表
+     */
+    @Modifying
+    @Query(value = "UPDATE Question q SET q.answer = :answer,q.level = :level,q.options = :options WHERE q.word = :word",nativeQuery = true)
+    public void updateQuestion(@Param("answer")String answer,@Param("level")int level,@Param("options")String options,@Param("word")String word);
+
     //根据 qid 来获取对应的单词
     Question getByQid(int qid);
-
-    //查询出一组题目10个
-    @Query(value = "SELECT * FROM Question order by rand() limit 2",nativeQuery = true)
-    List<Question> qryAGroupWorrds();
 
     //分页查询
     @Query(value = "SELECT * FROM Question LIMIT :PageNo,:PageSize",nativeQuery = true)
     List<Question> queryQuestionPage(@Param("PageNo") int PageNo, @Param("PageSize") int PageSize);
-
-    //为 @Query 注解传递参数的方式1: 命名参数的方式.
-//    @Query("SELECT p FROM Person p WHERE p.lastName = :lastName AND p.email = :email")
-//    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
 
     //查询数据表总的记录数
     @Query(value = "SELECT COUNT(*) FROM Question",nativeQuery = true)
@@ -46,6 +54,22 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     public void deleteByQid(@Param("qid") int qid);
 
     //根据word查询Question表
-    @Query(value = "SELECT *  FROM Question WHERE word = :word",nativeQuery = true)
+    @Query(value = "SELECT *  FROM Question WHERE word = :word LIMIT 1",nativeQuery = true)
     public Question getQuestionByWord(@Param("word")String word);
+
+    //根据level查询Question表 只返回第一条数据
+    @Query(value = "SELECT *  FROM Question WHERE level = :level LIMIT 1",nativeQuery = true)
+    public Question getQuestionByLevel(@Param("level")int level);
+
+
+    //下面是项目初期的一些测试
+
+    //为 @Query 注解传递参数的方式1: 命名参数的方式.
+//    @Query("SELECT p FROM Person p WHERE p.lastName = :lastName AND p.email = :email")
+//    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
+
+
+    //查询出一组题目2个
+    @Query(value = "SELECT * FROM Question order by rand() LIMIT 2",nativeQuery = true)
+    List<Question> qryAGroupWorrds();
 }

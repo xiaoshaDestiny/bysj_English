@@ -64,18 +64,55 @@ public class QuestionService {
      */
 
 
+    /**
+     * 把表单数据更新到数据库或者新增
+     * @param question 一个Question对象
+     */
+    @Transactional
+    public void  insertOrUpdateQuestion(Question question){
+        //先根据word查询数据库
+        System.out.println("log======>(xiaosha):根据word查询Question,参数是"+question.getWord());
+        Question queryQuestion = questionRepsotory.getQuestionByWord(question.getWord());
+
+        if(queryQuestion != null){ //数据库里面已经有这个单词了  更新
+            System.out.println("log======>(xiaosha):根据word更新Question,参数是"+question.getAnswer()+","+question.getLevel() +","+question.getOptions()+","+question.getWord());
+            questionRepsotory.updateQuestion(question.getAnswer(),question.getLevel(),
+                    question.getOptions(),question.getWord());
+        }
+        if(queryQuestion == null){ //数据库里面没有这个单词  插入
+            System.out.println("log======>(xiaosha):获取Question数据表的总记录数量");
+            int maxNum = questionRepsotory.queryNumber();
+            question.setQid(maxNum);
+            questionRepsotory.save(question);
+        }
+
+    }
+
+    /**
+     * 查询question表，只返回第一条，用在前端页面做展示
+     * @param level
+     * @return
+     */
+    public Question getAQUestionByLevel(String level){
+        int lev = Integer.parseInt(level);
+        System.out.println("log======>(xiaosha):根据难度等级查询Question,参数是"+lev);
+        Question question = questionRepsotory.getQuestionByLevel(lev);
+        return question;
+    }
 
     /**
      * 分页查询单词，将参数的计算弄到service层
-     * @param pageNo
-     * @param pageSize
+     * @param page 当前页
+     * @param limit 每页条数
      * @return
      */
-    public List<Question> getQuestionPage(int pageNo,int pageSize){
-        System.out.println("log======>(xiaosha):分页查询,参数第"+pageNo+"页，每页"+pageSize+"条数据");
+    public List<Question> getQuestionPage(String page,String limit){
+        int currentPage = Integer.parseInt(page);//当前页
+        int pageSize = Integer.parseInt(limit);//每页显示数据
+        System.out.println("log======>(xiaosha):分页查询,参数第"+currentPage+"页，每页"+pageSize+"条数据");
         //计算当前页
-        pageNo =  (pageNo -1)*pageSize;
-        List<Question> questions = questionRepsotory.queryQuestionPage(pageNo,pageSize);
+        currentPage =  (currentPage -1)*pageSize;
+        List<Question> questions = questionRepsotory.queryQuestionPage(currentPage,pageSize);
         return questions;
     }
 

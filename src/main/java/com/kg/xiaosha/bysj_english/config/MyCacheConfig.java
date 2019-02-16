@@ -12,7 +12,7 @@ public class MyCacheConfig {
 
 
     /**
-     * 指定Key的生成策略
+     * 指定缓存模块Key的生成策略
      * @return
      */
     @Bean("myKeyGenerator")

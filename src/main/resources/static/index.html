@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
   <head>
       <meta charset="UTF-8">
       <meta name="renderer" content="webkit">
@@ -9,7 +9,8 @@
       <link rel="stylesheet" href="css/common.css">
       <link rel="stylesheet" href="css/index.css">
 	  <title>青叶单词训练</title>
-      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <script src="js/jquery-1.9.1.min.js"></script>
+ <!--     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
   </head>
 
   <body>
@@ -30,7 +31,7 @@
           <li class="layui-nav-item">
               <a href="">词汇练习</a>
               <dl class="layui-nav-child">
-                  <dd><a href="">中学词汇</a></dd>
+                  <dd><a href="/socketQuestion">中学词汇</a></dd>
                   <dd><a href="">四六级词汇</a></dd>
                   <dd><a href="">考研热点高频</a></dd>
               </dl>
@@ -167,14 +168,12 @@
         </div>
       </div>
   </div>
-
-
-    <!--底部地址-->
+      <!--底部地址-->
     <div class="foot" style="background-color:#323232 ;margin-top: 20px;">
-    <br><br>
-      <p style="color: #C7C7C7" align="center"><span style="color: #556666;">destiny@XuRuiBiao.com</span>&nbsp;&nbsp;xiaosha</p><br>
-      <p style="color:#556666" align="center" ;>云南省昆明市呈贡区昆明理工大学</p><br>
-      <p style="color:#C7C7C7;" align="center">电话:+86-133-249-00262</p><br>
+        <br><br>
+        <p style="color: #C7C7C7" align="center"><span style="color: #556666;">destiny@XuRuiBiao.com</span>&nbsp;&nbsp;xiaosha</p><br>
+        <p style="color:#556666" align="center" ;>云南省昆明市呈贡区昆明理工大学</p><br>
+        <p style="color:#C7C7C7;" align="center">电话:+86-133-249-00262</p><br>
         <br>
     </div>
 

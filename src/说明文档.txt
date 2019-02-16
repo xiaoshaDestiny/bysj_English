@@ -1,0 +1,28 @@
+毕业设计，主要就三个页面：
+1、类似于百词斩的单词答题页面
+    每组10个单词答题，用Socket实现强交互性能，给出正确率等信息...
+2、题库管理界面
+    数据表格显示、可编辑查询时候表单回显、播放单词发音、增删改查等功能...
+3、一个凑数的首页，展示一些图片，数据等...
+4、心情好点就再做一个用户管理的，只做一件事，就是密码给我加密...
+5、要是心情再好点，就再做一个数据分析的，根据用户的答题结果来做...
+
+后端：
+SpringBoot     做场景启动        整合起来比较方便（项目是基于注解的模式，底层已经封装了Spring框架）
+SpringMVC      做视图解析        将一个请求映射为一个方法，方法返回值会自动被视图解析器解析到对应的HTML(传统MVC的控制层是servlet类)
+SpringData     做数据查询        其实就是JPA  是对Hibernate的封装
+Redis          做缓存            提升性能，降低数据库压力，不用频繁连接数据库
+Hadoop         整理数据          将一堆文本文件变成数据库可以执行的sql文件，可能大材小用，毕竟词典最多也就几百M
+Git            做版本控制        源码见本人GitHub链接：https://github.com/xiaoshaDestiny/bysj_English
+
+前端：
+Thymeleaf       做模板引擎       主要目的就一个，替换掉JSP
+Layui           做前端工具包     内置了很多JS,JQuery的函数，ajax请求也写在这些页面里面
+
+
+后端界面比较容易看清楚是什么意思..
+前端页面说明如下：
+common.html          resources/templates/common.html            将头部，底部相同的页面元素使用thymeleaf抽取出来，其他的页面就不用写了
+hello.html           resources/templates/hello.html             测试thymeleaf代替JSP取出参数的页面
+questionlist.html    resources/templates/questionlist.html      词库管理页面，进行增删改查，表单回显等
+questionsocket.html  resources/templates/questionsocket.html    答题界面，模仿的是牛客答题界面
