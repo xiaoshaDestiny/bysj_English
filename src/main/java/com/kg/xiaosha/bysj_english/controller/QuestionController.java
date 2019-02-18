@@ -26,6 +26,15 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
+    /**
+     * 修改项目默认的路径
+     *
+     */
+    @RequestMapping("/")
+    public String home(String name) {
+        System.out.println(11111111);
+        return "questionlist";
+    }
 
     /**
      * 顶部导航栏点击了答题的处理器

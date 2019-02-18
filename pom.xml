@@ -35,6 +35,14 @@
     </properties>
 
     <dependencies>
+        <!--热部署-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>1.5.16.RELEASE</version>
+        </dependency>
+
         <!--模板引擎-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
