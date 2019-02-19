@@ -145,14 +145,12 @@ public class QuestionService {
     }
 
 
-
-
     /**
      * 这是项目初期的一些代码，当时是用来测试是否查到数据了
      * @return
      */
     public List<Question> getAGroupQuestion(){
-        System.out.println("随机查询2个单词");
+        System.out.println("log======>(xiaosha):随机查询2个单词");
         List<Question> questions = questionRepsotory.qryAGroupWorrds();
         return questions;
     }

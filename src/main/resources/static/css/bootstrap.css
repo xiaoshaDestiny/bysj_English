@@ -1066,9 +1066,9 @@ th {
   content: "\e260";
 }
 * {
-  -webkit-box-sizing: border-box;
+ /* -webkit-box-sizing: border-box;*/
      -moz-box-sizing: border-box;
-          box-sizing: border-box;
+ /*         box-sizing: border-box;*/
 }
 *:before,
 *:after {
@@ -1443,7 +1443,7 @@ dl {
 }
 dt,
 dd {
-  line-height: 1.42857143;
+/*  line-height: 1.42857143;*/
 }
 dt {
   font-weight: bold;

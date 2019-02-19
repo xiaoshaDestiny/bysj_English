@@ -20,9 +20,21 @@ Thymeleaf       做模板引擎       主要目的就一个，替换掉JSP
 Layui           做前端工具包     内置了很多JS,JQuery的函数，ajax请求也写在这些页面里面
 
 
-后端界面比较容易看清楚是什么意思..
-前端页面说明如下：
+后端界面比较容易看清楚是什么意思..前端页面说明如下：
+resources/templates/路径下：
+index.html           resources/ststic/common.html               主页，因为项目默认的根路径是这个，所以没有使用模板引擎，做一些展示
 common.html          resources/templates/common.html            将头部，底部相同的页面元素使用thymeleaf抽取出来，其他的页面就不用写了
 hello.html           resources/templates/hello.html             测试thymeleaf代替JSP取出参数的页面
 questionlist.html    resources/templates/questionlist.html      词库管理页面，进行增删改查，表单回显等
 questionsocket.html  resources/templates/questionsocket.html    答题界面，模仿的是牛客答题界面
+
+resources/ststic/css/路径下:
+image文件夹、bootstap.css文件、questionsocket都是下载的，是写好的仿牛客app的前端页面
+common.css是公共的样式         index.css是index页面的css
+resources/ststic/fonts/路径下的东西也是仿牛客app的前端页面，里面是一些字体样式
+resources/ststic/js/路径下，jquery和bootstrap，还有一个是空的，之前用来测试题目数据json的文件，现在没用了，是空的，留着吧
+layui是下载下来的，项目中有用到layui前端工具包
+
+后端：
+com.kg.xiaosha.bysj_english.util 这个包下面的文件都没用，不用看。一个是之前高级程序设计的部分代码，还有一个消息码，因为ajax用的不多所以意义也不大
+

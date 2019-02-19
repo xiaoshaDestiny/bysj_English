@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 @Configuration
 public class MyCacheConfig {
-
-
     /**
      * 指定缓存模块Key的生成策略
      * @return
@@ -18,7 +16,6 @@ public class MyCacheConfig {
     @Bean("myKeyGenerator")
     public KeyGenerator keyGenerator(){
         return new KeyGenerator(){
-
             @Override
             public Object generate(Object target, Method method, Object... params) {
 
