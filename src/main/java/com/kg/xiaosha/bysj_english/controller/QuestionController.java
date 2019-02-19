@@ -26,14 +26,13 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
+
     /**
-     * 修改项目默认的路径
-     *
+     *回退到首页forward:/index.html
      */
-    @RequestMapping("/")
-    public String home(String name) {
-        System.out.println(11111111);
-        return "questionlist";
+    @RequestMapping(value = "/backindex")
+    public String home() {
+        return "forward:/index.html";
     }
 
     /**

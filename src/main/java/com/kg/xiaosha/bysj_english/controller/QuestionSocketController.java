@@ -32,10 +32,10 @@ public class QuestionSocketController {
             int random=(int)(Math.random()*4+1);//取1到4之间随机的一个随机数
             String item = "";
             switch (random){
-                case 1:{item = item + question.getAnswer() +";"+ question.getOptions(); qm.setQuestionAnswer("a");} break;                  //A
-                case 2:{item = item + options[0] +";"+question.getAnswer()+";"+options[1]+";"+options[2];qm.setQuestionAnswer("b");}break;  //B
-                case 3:{item = item + options[0] +";"+options[1]+";"+question.getAnswer()+";"+options[2];qm.setQuestionAnswer("c");}break;  //C
-                case 4:{item = item + question.getOptions()+";"+ question.getAnswer();qm.setQuestionAnswer("d");} break;                    //D
+                case 1:{item = item + question.getAnswer() +";"+ question.getOptions(); qm.setQuestionAnswer("A");} break;                  //A
+                case 2:{item = item + options[0] +";"+question.getAnswer()+";"+options[1]+";"+options[2];qm.setQuestionAnswer("B");}break;  //B
+                case 3:{item = item + options[0] +";"+options[1]+";"+question.getAnswer()+";"+options[2];qm.setQuestionAnswer("C");}break;  //C
+                case 4:{item = item + question.getOptions()+";"+ question.getAnswer();qm.setQuestionAnswer("D");} break;                    //D
             }
             qm.setQuestionId(Integer.toString(i+1));
             qm.setQuestionItems(item);
