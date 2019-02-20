@@ -207,4 +207,11 @@ public class QuestionController {
         return "hello";
     }
 
+    @ResponseBody
+    @RequestMapping("/updateOtionns")
+    public String updateAllQuestionOptions(){
+        questionService.updateOptions();
+        return "success";
+    }
+
 }

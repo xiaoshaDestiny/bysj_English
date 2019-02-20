@@ -72,4 +72,9 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     //查询出一组题目2个
     @Query(value = "SELECT * FROM Question order by rand() LIMIT 2",nativeQuery = true)
     List<Question> qryAGroupWorrds();
+
+    @Modifying
+    @Query(value = "UPDATE Question q SET q.options = :options WHERE q.word = :word",nativeQuery = true)
+    public void updateQuestionOptions(@Param("options")String options,@Param("word")String word);
+
 }

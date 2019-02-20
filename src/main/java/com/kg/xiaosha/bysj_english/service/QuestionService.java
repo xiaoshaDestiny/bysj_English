@@ -155,4 +155,38 @@ public class QuestionService {
         return questions;
     }
 
+    /**
+     * 下面这个方法是更新数据库里面每一个问题的干扰项的
+     */
+    @Transactional
+    public void updateOptions(){
+            String[] options = new String[3];
+            int random;
+            int maxNum = questionRepsotory.queryNumber();
+            Question question = new Question();
+            Question[] opques = new Question[3];
+
+            for(int i =1;i<= maxNum;i++){
+                //每一条记录都需要更新
+                question = questionRepsotory.getByQid(i);
+                if(question==null)continue;
+
+                //封装三个
+                for(int j =0;j<=2;j++){
+                    random = (int)(Math.random()*maxNum+1);
+                    if(random==i) {
+                        random= random -1;
+                    }System.out.println("随机数"+(j+1)+"是："+random);
+                    opques[j]= questionRepsotory.getByQid(random);
+                    options[j]=opques[j].getAnswer();
+                }
+                question.setOptions(options[0]+";"+options[1]+";"+options[2]);
+
+
+                System.out.println(question.toString());
+                questionRepsotory.updateQuestionOptions(question.getOptions(),question.getWord());
+
+            }
+    }
+
 }
