@@ -72,20 +72,32 @@ public class QuestionService {
     public void  insertOrUpdateQuestion(Question question){
         //先根据word查询数据库
         System.out.println("log======>(xiaosha):根据word查询Question,参数是"+question.getWord());
-        Question queryQuestion = questionRepsotory.getQuestionByWord(question.getWord());
+      //  Question queryQuestion = questionRepsotory.getQuestionByWord(question.getWord());
+        //System.out.println("新增/修改从数据库查询出来的结果是："+ queryQuestion);
 
-        if(queryQuestion != null){ //数据库里面已经有这个单词了  更新
+        if(questionRepsotory.getQuestionByWord(question.getWord()) == null){
+           /* System.out.println("log======>(xiaosha):获取Question数据表的总记录数量");
+            int maxNum = questionRepsotory.queryNumber();
+            question.setQid(maxNum+1);
+            questionRepsotory.deleteByQid(maxNum+1);*/
+            System.out.println("log======>(xiaosha):新增一条记录"+question.toString());
+            //questionRepsotory.save(question);
+            insertAQuestion(question);
+        }
+       else{ //数据库里面已经有这个单词了  更新
             System.out.println("log======>(xiaosha):根据word更新Question,参数是"+question.getAnswer()+","+question.getLevel() +","+question.getOptions()+","+question.getWord());
             questionRepsotory.updateQuestion(question.getAnswer(),question.getLevel(),
                     question.getOptions(),question.getWord());
         }
-        if(queryQuestion == null){ //数据库里面没有这个单词  插入
-            System.out.println("log======>(xiaosha):获取Question数据表的总记录数量");
-            int maxNum = questionRepsotory.queryNumber();
-            question.setQid(maxNum);
-            questionRepsotory.save(question);
-        }
 
+
+
+    }
+
+    @Transactional
+    public void insertAQuestion(Question question){
+        System.out.println("log======>(xiaosha):新增加一条记录");
+        questionRepsotory.insert(question.getOptions(),question.getAnswer(),question.getWord(),question.getLevel(),question.getPronounce());
     }
 
     /**
@@ -139,9 +151,10 @@ public class QuestionService {
      */
     public Question getQuestionByWord(String word){
         System.out.println("log======>(xiaosha):根据word查询Question表里的一条数据,参数word="+word);
-
+        Question question = new Question();
         //这里是还要改的，因为word不是主键，可能会查出多个来，只要一个返回展示就行
-       return questionRepsotory.getQuestionByWord(word);
+        question = questionRepsotory.getQuestionByWord(word);
+       return question;
     }
 
 
@@ -180,6 +193,8 @@ public class QuestionService {
                     opques[j]= questionRepsotory.getByQid(random);
                     options[j]=opques[j].getAnswer();
                 }
+                int level = (int)(Math.random()*3+1);
+                question.setLevel(level);
                 question.setOptions(options[0]+";"+options[1]+";"+options[2]);
 
 
