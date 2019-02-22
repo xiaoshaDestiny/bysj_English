@@ -1,13 +1,10 @@
 package com.kg.xiaosha.bysj_english.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.kg.xiaosha.bysj_english.bean.QuestionMessage;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import com.kg.xiaosha.bysj_english.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +43,7 @@ public class QuestionController {
 
 
     /**
-     *
+     *点击修改/新增表单提交按钮会在这里来处理
      * @param
      * @return
      */
@@ -61,29 +58,8 @@ public class QuestionController {
         String options =  option1 + ";" + option2 + ";" + option3;
         que.setOptions(options);
         que.setWord(word);
+        System.out.println("更新、修改传入的参数是"+que.toString());
         questionService.insertOrUpdateQuestion(que);
-
-        /**
-         * 业务逻辑，尽量保证数据库的 word字段是唯一的
-         * 1：先查询数据库里面有没有这条数据
-         * 有------>修改
-         * 没有---->增加 但是没有音标
-         */
-
-
-/*        Map<String,Object> map=new HashMap<String,Object>();
-
-        Question question = questionService.getQuestionByWord(word);
-        String[] options = question.getOptions().split(";");
-
-        map.put("word",question.getWord());
-        map.put("pronounce",question.getPronounce());
-        map.put("answer",question.getAnswer());
-        map.put("option1",options[0]);
-        map.put("option2",options[1]);
-        map.put("option3",options[2]);
-        map.put("level",question.getLevel());*/
-
         return que;
     }
 
@@ -126,17 +102,41 @@ public class QuestionController {
      */
     @RequestMapping("/getQuestion")
     public String getQuestionToForm(Model model, @RequestParam(required=false) String level,
-                     @RequestParam(required=false)String word) {
+                     @RequestParam(required=false)String word,@RequestParam(required=false) String flag) {
         Question question = new Question();
-
-        if(level != null ){//这是头部导航栏会发送请求
+        String[] options = {"mull","null","oll"};
+        question.setPronounce("zanwu");
+        if(level != null){//这是头部导航栏会发送请求 这里会有一个错误，就是level莫名其妙拼接了多个  把它截取第一个作为参数吧
+            if(level.length()>"1".length()){
+                level = level.split(",")[0];
+            }
             question = questionService.getAQUestionByLevel(level); //查询出第一条记录 要显示到表单里面
+            options = question.getOptions().split(";");
         }
         if(word != null){ //给thymeleaf回显数据的
             question = questionService.getQuestionByWord(word);
+            if(question == null){
+                return "redirect:error.html";
+            }
+            else{
+                options = question.getOptions().split(";");
+            }
         }
         model.addAttribute("que",question);
+        model.addAttribute("options",options);
+        return "questionlist";
+    }
+
+    /**
+     * 查询单词 按钮提交之后是在这里来处理的   是在jS里面写的
+     * @param model
+     * @return
+     */
+    @RequestMapping("/backtolist")
+    public String backtolist(Model model) {
+        Question question = questionService.getQuestionById(2);
         String[] options = question.getOptions().split(";");
+        model.addAttribute("que",question);
         model.addAttribute("options",options);
         return "questionlist";
     }
@@ -207,6 +207,10 @@ public class QuestionController {
         return "hello";
     }
 
+    /**
+     * 更新单词的option选项
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/updateOtionns")
     public String updateAllQuestionOptions(){

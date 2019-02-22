@@ -26,9 +26,15 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     void updatePersonName(@Param("id") Integer id, @Param("lastName") String lastName);*/
 
 
-    //新增数据
-    @Modifying
+   @Modifying
    public Question save(Question question);
+
+
+    //新增数据
+ //INSERT INTO `question` VALUES ('1', 'n.杂草，野草vi.除草;a.清晰的vt.清除;n.记述；解释；帐目', 'vt.丢弃；放弃，抛弃', '﻿abandon', '2', 'ə’bændən');
+   @Modifying
+   @Query(value = "INSERT INTO Question (options,answer,word,level,pronounce) VALUES (:options,:answer,:word,:level,:pronounce)",nativeQuery = true)
+   public void insert(@Param("options") String options,@Param("answer") String answer,@Param("word") String word,@Param("level") int level,@Param("pronounce") String pronounce );
 
     /**
      * 根据word更新Question表
@@ -54,7 +60,7 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     public void deleteByQid(@Param("qid") int qid);
 
     //根据word查询Question表
-    @Query(value = "SELECT *  FROM Question WHERE word = :word LIMIT 1",nativeQuery = true)
+    @Query(value = "SELECT *  FROM Question WHERE word = :word",nativeQuery = true)
     public Question getQuestionByWord(@Param("word")String word);
 
     //根据level查询Question表 只返回第一条数据
@@ -63,14 +69,13 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
 
 
     //下面是项目初期的一些测试
-
     //为 @Query 注解传递参数的方式1: 命名参数的方式.
 //    @Query("SELECT p FROM Person p WHERE p.lastName = :lastName AND p.email = :email")
 //    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
 
 
-    //查询出一组题目2个
-    @Query(value = "SELECT * FROM Question order by rand() LIMIT 2",nativeQuery = true)
+    //查询出一组题目X个
+    @Query(value = "SELECT * FROM Question order by rand() LIMIT 10",nativeQuery = true)
     List<Question> qryAGroupWorrds();
 
     @Modifying

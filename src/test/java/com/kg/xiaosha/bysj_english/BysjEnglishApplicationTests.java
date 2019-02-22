@@ -40,7 +40,7 @@ public class BysjEnglishApplicationTests {
 
 
     /**
-     * 这里是WordSQLStep2
+     * 这里是WordSQLStep2 但是这里的东西不会修改数据库  在controller里面相同的代码就能修改成功
      */
     @Test
     @Transactional

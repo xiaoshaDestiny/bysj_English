@@ -7,6 +7,7 @@
 4、心情好点就再做一个用户管理的，只做一件事，就是密码给我加密...
 5、要是心情再好点，就再做一个数据分析的，根据用户的答题结果来做...
 
+
 后端：
 SpringBoot     做场景启动        整合起来比较方便（项目是基于注解的模式，底层已经封装了Spring框架）
 SpringMVC      做视图解析        将一个请求映射为一个方法，方法返回值会自动被视图解析器解析到对应的HTML(传统MVC的控制层是servlet类)
@@ -38,3 +39,6 @@ layui是下载下来的，项目中有用到layui前端工具包
 后端：
 com.kg.xiaosha.bysj_english.util 这个包下面的文件都没用，不用看。一个是之前高级程序设计的部分代码，还有一个消息码，因为ajax用的不多所以意义也不大
 
+shiro 安全
+
+HashTable HashMap CoucurrentHasnMap Redis

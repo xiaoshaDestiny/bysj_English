@@ -163,7 +163,7 @@ public class QuestionService {
      * @return
      */
     public List<Question> getAGroupQuestion(){
-        System.out.println("log======>(xiaosha):随机查询2个单词");
+        System.out.println("log======>(xiaosha):随机查询若干个单词作为题目");
         List<Question> questions = questionRepsotory.qryAGroupWorrds();
         return questions;
     }

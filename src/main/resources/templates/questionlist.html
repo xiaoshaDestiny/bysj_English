@@ -44,7 +44,9 @@
             </div>
         </form>
 
-        <form class="layui-form layui-form-pane" th:action="@{/submitQuestion}" method="post">
+
+        <!--th:action="@{/submitQuestion}" -->
+        <form id="subque" class="layui-form layui-form-pane" method="post">
             <!--这里放单词和发音还有发音按钮-->
             <fieldset class="layui-elem-field">
                 <legend id="word1" th:utext="${que.word}" style="font-size:48px">单词放这</legend>
@@ -109,7 +111,7 @@
                 </div>
             </div>
             <div class="layui-form-item" style="margin-bottom: 100px">
-                <button class="layui-btn" lay-submit="" lay-filter="demo2">确认修改/新增</button>
+                <button id="submit" class="layui-btn" lay-submit="" lay-filter="demo2">确认修改/新增</button>
             </div>
         </form>
     </div>
@@ -193,8 +195,8 @@
                     {field:'qid', title:'ID', width:80, fixed: 'left',sort: true},
                     {field:'word', title:'单词', width:150, edit: 'text'},
                     {field:'answer', title:'意思', width:180,edit: 'text'},
-                    {field:'pronounce', title:'发音', width:200},
-                    {field:'level', title:'难度', width:90,sort: true,},
+                    {field:'pronounce', title:'发音', width:100},
+                    {field:'level', title:'难度', width:50,sort: true,},
                     {field:'options', title:'干扰选项', width:300,edit: 'text'},
                     {fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
@@ -299,6 +301,23 @@
         });
     });
 
+    var level = 2;
+   $("#submit").on("click",function(){
+        var data = $('#subque').serialize();
+        $.ajax({
+            url:'/submitQuestion',
+            type:'post',
+            data:data,
+            success:function(que){
+            }
+        });
+       alert('修改/增加数据成功，页面已经刷新，可以进行单词查询');
+       //window.parent.location.reload();
+       var href ="/backtolist";
+       console.log(href);
+       window.location.href=href;
+    });
+
     $("#btmpronounce1").on("click",function(){
     // 1. 美式：http://media.shanbay.com/audio/us/%s.mp3   //var src = 'http://media.shanbay.com/audio/us/'+word+'.mp3';
     // 2. 英式：http://media.shanbay.com/audio/uk/%s.mp3
@@ -318,7 +337,6 @@
         console.log(str);
         $("#wordaudio").html(str);*/
     });
-
 
     /**
      * 下边是英式的   想写啊 但是发现 美式 和 英式的发音的文本还不太一样   所以  放弃 ！
