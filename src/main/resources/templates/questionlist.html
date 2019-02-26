@@ -183,9 +183,12 @@
 <script type="text/javascript">
     layui.use('table', function(){
         var table = layui.table;
+        var level = [[${level}]];
+        var urltopage = '/getPage?levle='+level;
+        /*alert(urltopage);*/
         table.render({
             elem: '#test'
-            ,url:'/getPage'
+            ,url: urltopage
             ,toolbar: '#toolbarDemo'
             ,title: '单词表'
             ,totalRow: true

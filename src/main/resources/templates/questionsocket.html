@@ -19,8 +19,9 @@ var HH = 0;//时
 var mm = 0;//分
 var ss = 0;//秒
 var timeState = true;//时间状态 默认为true 开启时间
+var levle = [[${level}]]; //thymeleaf在Js里面获取SpringMVCModel里面写的值
 var questionsRequest = $.ajax({
-    url: '/getQuestionList',
+    url: '/getQuestionList?level='+levle,
     type: 'POST',
     dataType: 'JSON',
     cache : false,

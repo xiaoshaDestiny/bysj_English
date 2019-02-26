@@ -31,19 +31,21 @@
             <li class="layui-nav-item" style="border: none;">
                 <span>词汇练习</span>
                 <dl class="layui-nav-child">
-                    <dd><a href="/socketQuestion">中学词汇</a></dd>
-                    <dd><a href="/socketQuestion">四六级词汇</a></dd>
-                    <dd><a href="/socketQuestion">考研高频词汇</a></dd>
+                    <dd><a href="/socketQuestion?level=1">中学词汇</a></dd>
+                    <dd><a href="/socketQuestion?level=2">四六级词汇</a></dd>
+                    <dd><a href="/socketQuestion?level=3">考研高频词汇</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item" style="border: 1px #fff;">
+            <li class="layui-nav-item" style="border: none;">
                 <span>词库管理</span>
                 <dl class="layui-nav-child">
                     <dd><a href="/getQuestion?level=1">中学词汇</a></dd>
                     <dd><a href="/getQuestion?level=2">四六级词汇</a></dd>
                     <dd><a href="/getQuestion?level=3">考研热点高频</a></dd>
+                    <dd><a href="/getQuestion">全部词汇管理</a></dd>
                 </dl>
             </li>
+            <li class="layui-nav-item layui-this" style="border: none;"><a href="/backindex">错题本本</a></li>
         </ul>
     </div>
 </nav>

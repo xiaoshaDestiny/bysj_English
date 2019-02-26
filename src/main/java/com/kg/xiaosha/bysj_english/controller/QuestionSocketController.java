@@ -4,8 +4,10 @@ import com.kg.xiaosha.bysj_english.bean.QuestionMessage;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import com.kg.xiaosha.bysj_english.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -22,8 +24,9 @@ public class QuestionSocketController {
 
     @ResponseBody
     @RequestMapping("/getQuestionList")
-    public List<QuestionMessage> getQuestion(){
-        List<Question> questions = questionService.getAGroupQuestion();
+    public List<QuestionMessage> getQuestion(@RequestParam String level){
+        //List<Question> questions = questionService.getAGroupQuestion();//这是随机查询数据库10条数据，没有难度区分
+        List<Question> questions = questionService.getAGroupQuestionByLevel(Integer.parseInt(level));//有难度区分的
         List<QuestionMessage> questionMessageList = new ArrayList<QuestionMessage>();
         for(int i = 0;i<questions.size();i++){
             Question question = questions.get(i);

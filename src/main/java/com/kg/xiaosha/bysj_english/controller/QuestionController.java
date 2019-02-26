@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * 控制层组件，关于数据表question的请求映射
@@ -36,8 +38,9 @@ public class QuestionController {
      * 顶部导航栏点击了答题的处理器
      * @return  收到这个请求后返回到答题页面
      */
-    @RequestMapping(value = "/socketQuestion")
-    public String socketQuestion(){
+    @RequestMapping(value="/socketQuestion")
+    public String socketQuestion( Model model,@RequestParam String level){
+        model.addAttribute("level",level);
         return "questionsocket";
     }
 
@@ -104,8 +107,9 @@ public class QuestionController {
     public String getQuestionToForm(Model model, @RequestParam(required=false) String level,
                      @RequestParam(required=false)String word,@RequestParam(required=false) String flag) {
         Question question = new Question();
-        String[] options = {"mull","null","oll"};
-        question.setPronounce("zanwu");
+        String[] options = {"null","null","nll"};
+        question.setPronounce("点击导航栏刷新");
+        question.setWord("走丢了！");
         if(level != null){//这是头部导航栏会发送请求 这里会有一个错误，就是level莫名其妙拼接了多个  把它截取第一个作为参数吧
             if(level.length()>"1".length()){
                 level = level.split(",")[0];
@@ -122,8 +126,14 @@ public class QuestionController {
                 options = question.getOptions().split(";");
             }
         }
+        if(level == null){
+            level = "0";   //为0的时候代表查询所有的吧
+            //question = questionService.getQuestionByWord("abstract");
+        }
         model.addAttribute("que",question);
         model.addAttribute("options",options);
+
+        model.addAttribute("level",level);//这个不是用来显示的，是传递给分页查询的
         return "questionlist";
     }
 
@@ -165,7 +175,39 @@ public class QuestionController {
     @ResponseBody
     @RequestMapping("/getPage")
     public Map<String,Object> getQuestionPage(@RequestParam(required=true) String page,
-              @RequestParam(required=true) String limit){
+              @RequestParam(required=true) String limit,@RequestParam(required=false) String levle){
+        Map<String,Object> map=new HashMap<String,Object>();
+        List<Question> questionlist = new ArrayList<Question>();
+        int countx = 0;
+        if(levle.equals("0")){//这里是查询全部吔
+            //小龙、大龙、蓝Buff、红Buff,我全都要！！！
+            questionlist = questionService.getQuestionPage(page,limit);
+            countx =  questionService.getQuestionNumber();
+        }else{
+            //算了，我头不铁，我只要大龙...
+            questionlist = questionService.getQuestionPageByLevel(page,limit,levle);
+            countx = questionService.getQuestionNumberBylevel(levle);
+        }
+
+        map.put("code",0);
+        map.put("msg","");
+        map.put("count",countx);
+        map.put("data",questionlist);
+        return map;
+    }
+
+
+/*    *//**
+     * 分页查询，这是自动调用的，layui前端发起的ajax请求
+     * @return
+     *//*
+    @ResponseBody
+    @RequestMapping("/getPage")
+    public Map<String,Object> getQuestionPage(@RequestParam(required=true) String page,
+                                              @RequestParam(required=true) String limit,@RequestParam(required=true) String levle){
+        System.out.println("levle="+levle);
+
+
         Map<String,Object> map=new HashMap<String,Object>();
         List<Question> questionlist = questionService.getQuestionPage(page, limit);
         int countx=  questionService.getQuestionNumber();
@@ -174,7 +216,7 @@ public class QuestionController {
         map.put("count",countx);
         map.put("data",questionlist);
         return map;
-    }
+    }*/
 
 
     /**

@@ -1,6 +1,8 @@
 package com.kg.xiaosha.bysj_english.dao;
 
 import com.kg.xiaosha.bysj_english.entity.Question;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,7 +33,7 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
 
 
     //新增数据
- //INSERT INTO `question` VALUES ('1', 'n.杂草，野草vi.除草;a.清晰的vt.清除;n.记述；解释；帐目', 'vt.丢弃；放弃，抛弃', '﻿abandon', '2', 'ə’bændən');
+   //INSERT INTO `question` VALUES ('1', 'n.杂草，野草vi.除草;a.清晰的vt.清除;n.记述；解释；帐目', 'vt.丢弃；放弃，抛弃', '﻿abandon', '2', 'ə’bændən');
    @Modifying
    @Query(value = "INSERT INTO Question (options,answer,word,level,pronounce) VALUES (:options,:answer,:word,:level,:pronounce)",nativeQuery = true)
    public void insert(@Param("options") String options,@Param("answer") String answer,@Param("word") String word,@Param("level") int level,@Param("pronounce") String pronounce );
@@ -46,18 +48,34 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
     //根据 qid 来获取对应的单词
     Question getByQid(int qid);
 
-    //分页查询
+    //分页查询全部的数据
     @Query(value = "SELECT * FROM Question LIMIT :PageNo,:PageSize",nativeQuery = true)
     List<Question> queryQuestionPage(@Param("PageNo") int PageNo, @Param("PageSize") int PageSize);
+
+    //分页查询,根据难度等级的查询
+    @Query(value = "SELECT * FROM Question WHERE level = :level LIMIT :PageNo,:PageSize",nativeQuery = true)
+    List<Question> queryQuestionPageByLevel(@Param("PageNo") int PageNo, @Param("PageSize") int PageSize,@Param("level") int level);
+
 
     //查询数据表总的记录数
     @Query(value = "SELECT COUNT(*) FROM Question",nativeQuery = true)
     public int queryNumber();
 
+
+    //查询数据表总的记录数
+    @Query(value = "SELECT COUNT(*) FROM Question WHERE level =:level",nativeQuery = true)
+    public int queryNumberByLevel(@Param("level") int level);
+
+
     //根据id删除单词
     @Modifying
     @Query(value = "DELETE  FROM Question WHERE qid = :qid",nativeQuery = true)
     public void deleteByQid(@Param("qid") int qid);
+
+    //根据id删除单词
+    @Modifying
+    @Query(value = "DELETE  FROM Question WHERE word = :word",nativeQuery = true)
+    public void deleteByWord(@Param("word") String word);
 
     //根据word查询Question表
     @Query(value = "SELECT *  FROM Question WHERE word = :word",nativeQuery = true)
@@ -74,9 +92,13 @@ public interface QuestionRepsotory extends JpaRepository<Question, Integer>, Jpa
 //    List<Person> testQueryAnnotationParams2(@Param("email") String email, @Param("lastName") String lastName);
 
 
-    //查询出一组题目X个
+    //随机查询出一组题目X个
     @Query(value = "SELECT * FROM Question order by rand() LIMIT 10",nativeQuery = true)
     List<Question> qryAGroupWorrds();
+
+    //根据难度查询一组题目X个
+    @Query(value = "SELECT * FROM Question WHERE level = :level order by rand() LIMIT 10",nativeQuery = true)
+    List<Question> qryAGroupWorrdsByLevel(@Param("level")int level);
 
     @Modifying
     @Query(value = "UPDATE Question q SET q.options = :options WHERE q.word = :word",nativeQuery = true)
