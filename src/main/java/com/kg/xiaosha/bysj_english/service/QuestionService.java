@@ -4,6 +4,7 @@ import com.kg.xiaosha.bysj_english.dao.QuestionRepsotory;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 
 @Service
+@CacheConfig(cacheNames="question")
 public class QuestionService {
 
     @Autowired
@@ -113,21 +115,7 @@ public class QuestionService {
         return questions;
     }
 
-
-
-    /**
-     * 查询  使用缓存统一将key存为word  下面是使用缓存了的
-     */
-     //根据word查询question数据表
-    //@Cacheable(cacheNames="question",key = "#word")
-    public Question getQuestionByWord(String word){
-        System.out.println("==========>log(xiaosha):根据word查询Question表里的一条数据,参数word="+word);
-        return questionRepsotory.getQuestionByWord(word);
-    }
-
-
     //查询question表，只返回第一条，用在前端页面做展示
-   // @Cacheable(key = "#level")
     public Question getAQUestionByLevel(String level){
         int lev = Integer.parseInt(level);
         System.out.println("==========>log(xiaosha):根据难度等级查询Question,参数是"+lev);
@@ -136,7 +124,6 @@ public class QuestionService {
     }
 
     //根据id查询Question数据表
-    //@Cacheable(cacheNames = {"question"})
     public Question getQuestionById(int id){
         System.out.println("==========>log(xiaosha):根据id查询Question数据表，参数id="+id+"(使用了缓存)");
         return questionRepsotory.getByQid(id);
@@ -144,11 +131,21 @@ public class QuestionService {
 
 
     /**
+     * 查询  使用缓存统一将key存为word  下面是使用缓存了的
+     */
+     //根据word查询question数据表
+    @Cacheable(key = "#word")
+    public Question getQuestionByWord(String word){
+        System.out.println("==========>log(xiaosha):根据word查询Question表里的一条数据,参数word="+word);
+        return questionRepsotory.getQuestionByWord(word);
+    }
+
+    /**
      * 增加
      */
     //新增一条数据
     @Transactional
-    //@CachePut(cacheNames = {"question"},key = "#question.word")
+    @CachePut(key = "#question.word")
     public Question insertAQuestion(Question question){
         System.out.println("==========>log(xiaosha):新增加一条记录");
         questionRepsotory.insert(question.getOptions(),question.getAnswer(),question.getWord(),question.getLevel(),question.getPronounce());
@@ -160,7 +157,7 @@ public class QuestionService {
      */
 
     @Transactional
-    //@CachePut(cacheNames="question",key = "#question.word")
+    @CachePut(key = "#word")
     public Question updateAQuestion(Question question){
         questionRepsotory.updateQuestion(question.getAnswer(),question.getLevel(),
                 question.getOptions(),question.getWord());
@@ -179,7 +176,7 @@ public class QuestionService {
 
     //根据ID删除Question表的一条记录,删除和增加要在service上加事务
     @Transactional
-    //@CacheEvict(cacheNames = {"question"},beforeInvocation = true,key = "#word")
+    @CacheEvict(beforeInvocation = true,allEntries = true,key = "#word")
     public Question deleteQuestionByWord(String word){
         Question question = questionRepsotory.getQuestionByWord(word);
         questionRepsotory.deleteByWord(word);

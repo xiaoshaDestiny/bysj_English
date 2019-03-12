@@ -34,6 +34,7 @@
         <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
     </properties>
 
+
     <dependencies>
         <!--热部署-->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
@@ -42,7 +43,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <version>1.5.16.RELEASE</version>
         </dependency>
-
         <!--模板引擎-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,6 +66,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

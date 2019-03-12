@@ -3,6 +3,7 @@ package com.kg.xiaosha.bysj_english.controller;
 import com.kg.xiaosha.bysj_english.entity.Question;
 import com.kg.xiaosha.bysj_english.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -144,7 +145,7 @@ public class QuestionController {
      */
     @RequestMapping("/backtolist")
     public String backtolist(Model model) {
-        Question question = questionService.getQuestionById(2);
+        Question question = questionService.getQuestionById(500);
         String[] options = question.getOptions().split(";");
         model.addAttribute("que",question);
         model.addAttribute("options",options);
@@ -237,17 +238,6 @@ public class QuestionController {
     }
 
 
-    /**
-     * 测试视图解析器
-     * @param model
-     * @return
-     */
-    @GetMapping("/hello")
-    public String hello(Model model) {
-        String name = "xiaosha";
-        model.addAttribute("name", name);
-        return "hello";
-    }
 
     /**
      * 更新单词的option选项
