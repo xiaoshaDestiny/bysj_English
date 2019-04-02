@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -20,7 +21,6 @@ import java.util.List;
  */
 
 @Service
-@CacheConfig(cacheNames="question")
 public class QuestionService {
 
     @Autowired
@@ -134,7 +134,7 @@ public class QuestionService {
      * 查询  使用缓存统一将key存为word  下面是使用缓存了的
      */
      //根据word查询question数据表
-    @Cacheable(key = "#word")
+    @Cacheable(value="question",key = "#word")
     public Question getQuestionByWord(String word){
         System.out.println("==========>log(xiaosha):根据word查询Question表里的一条数据,参数word="+word);
         return questionRepsotory.getQuestionByWord(word);
@@ -145,7 +145,6 @@ public class QuestionService {
      */
     //新增一条数据
     @Transactional
-    @CachePut(key = "#question.word")
     public Question insertAQuestion(Question question){
         System.out.println("==========>log(xiaosha):新增加一条记录");
         questionRepsotory.insert(question.getOptions(),question.getAnswer(),question.getWord(),question.getLevel(),question.getPronounce());
@@ -157,10 +156,17 @@ public class QuestionService {
      */
 
     @Transactional
-    @CachePut(key = "#word")
+    @Cacheable(value="question",key = "#word")
     public Question updateAQuestion(Question question){
+        Jedis jedis = new Jedis("192.168.1.180",6379);
+        System.out.println(jedis.ping());
+        //"question:\"accordingly\""
+        String key = "\""+question.getWord()+"\"";
+        System.out.println(jedis.type(key));
+        System.out.println(jedis.del(key));
         questionRepsotory.updateQuestion(question.getAnswer(),question.getLevel(),
                 question.getOptions(),question.getWord());
+
         return question;
     }
 
@@ -176,8 +182,16 @@ public class QuestionService {
 
     //根据ID删除Question表的一条记录,删除和增加要在service上加事务
     @Transactional
-    @CacheEvict(beforeInvocation = true,allEntries = true,key = "#word")
+    //@CacheEvict(value="question",beforeInvocation = true,allEntries = true,key = "#word")
     public Question deleteQuestionByWord(String word){
+        Jedis jedis = new Jedis("192.168.1.180",6379);
+        System.out.println(jedis.ping());
+        //"question:\"accordingly\""
+        String key = "\""+word+"\"";
+        System.out.println(jedis.type(key));
+        System.out.println(jedis.del(key));
+
+        System.out.println(key);
         Question question = questionRepsotory.getQuestionByWord(word);
         questionRepsotory.deleteByWord(word);
         return question;
