@@ -13,8 +13,9 @@ SpringBoot     做场景启动        整合起来比较方便（项目是基于
 SpringMVC      做视图解析        将一个请求映射为一个方法，方法返回值会自动被视图解析器解析到对应的HTML(传统MVC的控制层是servlet类)
 SpringData     做数据查询        其实就是JPA  是对Hibernate的封装
 Redis          做缓存            提升性能，降低数据库压力，不用频繁连接数据库
-Hadoop         整理数据          将一堆文本文件变成数据库可以执行的sql文件，可能大材小用，毕竟词典最多也就几百M
 Git            做版本控制        源码见本人GitHub链接：https://github.com/xiaoshaDestiny/bysj_English
+MYSQL 数据库事务 缓存 微服务
+数据设计三大范式。。。
 
 前端：
 Thymeleaf       做模板引擎       主要目的就一个，替换掉JSP

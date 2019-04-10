@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 这里是真正的查询数据库的业务逻辑实现
+ * 这里是真正的查询数据库的业务逻辑实现  springdata  数据库    ACID 隐式事务  显示事务  update insert
  * @author xiaosha
  * @create 2019-01-19 22:23
  *

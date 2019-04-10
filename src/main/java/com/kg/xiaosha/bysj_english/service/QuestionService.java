@@ -157,13 +157,16 @@ public class QuestionService {
 
     @Transactional
     @Cacheable(value="question",key = "#word")
+    //@CachePut(value="question",key = "#question.word")
     public Question updateAQuestion(Question question){
+
         Jedis jedis = new Jedis("192.168.1.180",6379);
         System.out.println(jedis.ping());
         //"question:\"accordingly\""
         String key = "\""+question.getWord()+"\"";
         System.out.println(jedis.type(key));
         System.out.println(jedis.del(key));
+
         questionRepsotory.updateQuestion(question.getAnswer(),question.getLevel(),
                 question.getOptions(),question.getWord());
 
@@ -182,7 +185,7 @@ public class QuestionService {
 
     //根据ID删除Question表的一条记录,删除和增加要在service上加事务
     @Transactional
-    //@CacheEvict(value="question",beforeInvocation = true,allEntries = true,key = "#word")
+   // @CacheEvict(value="question",beforeInvocation = true,allEntries = true,key = "#word")
     public Question deleteQuestionByWord(String word){
         Jedis jedis = new Jedis("192.168.1.180",6379);
         System.out.println(jedis.ping());
@@ -274,7 +277,6 @@ public class QuestionService {
                 question.setOptions(options[0]+";"+options[1]+";"+options[2]);
                 System.out.println(question.toString());
                 questionRepsotory.updateQuestionOptions(question.getOptions(),question.getWord());
-
             }
     }
 
